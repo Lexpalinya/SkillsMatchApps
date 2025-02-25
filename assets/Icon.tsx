@@ -251,3 +251,30 @@ export function IconamoonEdit(props: SvgProps) {
     </Svg>
   );
 }
+
+export function FluentPerson20Regular(props: SvgProps) {
+  return (
+    <Svg width={20} height={20} viewBox="0 0 20 20" {...props}>
+      <Path
+        fill="currentColor"
+        d="M10 2a4 4 0 1 0 0 8a4 4 0 0 0 0-8M7 6a3 3 0 1 1 6 0a3 3 0 0 1-6 0m-1.991 5A2 2 0 0 0 3 13c0 1.691.833 2.966 2.135 3.797C6.417 17.614 8.145 18 10 18s3.583-.386 4.865-1.203C16.167 15.967 17 14.69 17 13a2 2 0 0 0-2-2zM4 13c0-.553.448-1 1.009-1H15a1 1 0 0 1 1 1c0 1.309-.622 2.284-1.673 2.953C13.257 16.636 11.735 17 10 17s-3.257-.364-4.327-1.047C4.623 15.283 4 14.31 4 13"></Path>
+    </Svg>
+  );
+}
+
+export function CuidaLogoutOutline(props: SvgProps) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" {...props}>
+      <G className="logout-outline">
+        <G
+          fill="currentColor"
+          fillRule="evenodd"
+          className="Vector"
+          clipRule="evenodd">
+          <Path d="M3 7a5 5 0 0 1 5-5h5a1 1 0 1 1 0 2H8a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h5a1 1 0 1 1 0 2H8a5 5 0 0 1-5-5z"></Path>
+          <Path d="M14.47 7.316a1 1 0 0 1 1.414-.046l4.8 4.5a1 1 0 0 1 0 1.46l-4.8 4.5a1 1 0 1 1-1.368-1.46l2.955-2.77H8a1 1 0 1 1 0-2h9.471l-2.955-2.77a1 1 0 0 1-.046-1.414"></Path>
+        </G>
+      </G>
+    </Svg>
+  );
+}

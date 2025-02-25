@@ -5,9 +5,10 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
+import React, {Component, ComponentType} from 'react';
 import color from '../../Constants/color';
 
 const theme = 'light';
@@ -17,6 +18,8 @@ interface CustomButtonProps {
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   disabled?: boolean;
+  icon?: React.ReactNode;
+  iconStyle?: StyleProp<ViewStyle>;
 }
 const CustomButton: React.FC<CustomButtonProps> = ({
   onPress,
@@ -24,6 +27,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   style,
   textStyle,
   disabled,
+  icon,
+  iconStyle,
 }) => {
   return (
     <TouchableOpacity
@@ -31,6 +36,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       style={[styles.buttom, style]}
       disabled={disabled}>
       <Text style={[styles.buttomText, textStyle]}>{title}</Text>
+      {icon && <View style={[styles.icon, iconStyle]}>{icon}</View>}
     </TouchableOpacity>
   );
 };
@@ -46,10 +52,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 3,
+    display: 'flex',
+    flexDirection: 'row',
   },
   buttomText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: color[theme].backgroundPage,
+  },
+  icon: {
+    marginLeft: 10,
   },
 });

@@ -4,6 +4,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import PostTab from './Tab/PostTab';
 import {
+  CuidaLogoutOutline,
   FaListAlt,
   IconParkSolidAddWeb,
   LsiconSettingOutline,

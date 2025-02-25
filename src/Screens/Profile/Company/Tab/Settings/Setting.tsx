@@ -1,7 +1,8 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 import color from '../../../../../Constants/color';
 import {
+  CuidaLogoutOutline,
   LsiconSettingOutline,
   SolarAltArrowRightLineDuotone,
   SolarUserCheckLinear,
@@ -10,6 +11,8 @@ import {SvgProps} from 'react-native-svg';
 
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../../../../Router/RootNavigation';
+import {useLogout} from '../../../../../Utils/useLogOut';
+import CustomAlert from '../../../../../Utils/components/CustomAlert';
 const theme = 'light';
 interface menuProps {
   title: string;
@@ -19,9 +22,23 @@ interface menuProps {
 const menu: menuProps[] = [
   {title: 'ຢືນຢັນຂໍ້ມູນອົງກອນ', icon: SolarUserCheckLinear, route: 'KycPage'},
   {title: 'ຕັ້ງຄ່າ', icon: LsiconSettingOutline, route: 'SettingPage'},
+  {title: 'ອອກຈາກລະບົບ', icon: CuidaLogoutOutline, route: 'LoginPage'},
 ];
 const Setting = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const {
+    alertVisible,
+    confirmLogout,
+    hideLogoutAlert,
+    navigation,
+    showLogoutAlert,
+  } = useLogout();
+  const onPress = (index: number, item: menuProps) => {
+    if (index === menu.length - 1) {
+      showLogoutAlert();
+    } else {
+      navigation.navigate(item.route);
+    }
+  };
   return (
     <View
       style={{
@@ -34,7 +51,7 @@ const Setting = () => {
           <TouchableOpacity
             key={index}
             style={styles.button}
-            onPress={() => navigation.navigate(item.route)}>
+            onPress={() => onPress(index, item)}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon width={24} height={24} />
               <Text style={styles.text} numberOfLines={1}>
@@ -45,6 +62,14 @@ const Setting = () => {
           </TouchableOpacity>
         );
       })}
+
+      <CustomAlert
+        visible={alertVisible}
+        title="ອອກຈາກລະບົບ"
+        message="ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກ?"
+        onCancel={hideLogoutAlert}
+        onConfirm={confirmLogout}
+      />
     </View>
   );
 };
