@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS == 'ios' ? 12 : 8,
     paddingHorizontal: 16,
     minHeight: 48,
+    color: color[theme].textPrimary,
   },
 
   leftIcon: {

@@ -22,7 +22,6 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.alertBox}>
-          {/* ปุ่มปิด */}
           <TouchableOpacity style={styles.closeButton} onPress={onCancel}>
             <Text style={styles.closeText}>✕</Text>
           </TouchableOpacity>

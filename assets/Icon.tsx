@@ -278,3 +278,17 @@ export function CuidaLogoutOutline(props: SvgProps) {
     </Svg>
   );
 }
+
+export function TablerSearch(props: SvgProps) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" {...props}>
+      <Path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6"></Path>
+    </Svg>
+  );
+}
