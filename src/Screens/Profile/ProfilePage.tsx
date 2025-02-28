@@ -9,7 +9,9 @@ const role: string = 'company';
 const ProfilePage = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View>{role === 'company' ? <CompanyScreen /> : <JobberScree />}</View>
+    <View style={styles.stlyesView}>
+      {role === 'company' ? <CompanyScreen /> : <JobberScree />}
+    </View>
   );
 };
 

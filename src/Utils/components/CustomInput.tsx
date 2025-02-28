@@ -88,6 +88,7 @@ const CustomInputAuth: React.FC<CustomInputProps> = ({
           style={getInputStyle()}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onChangeText={onChangeText}
           {...restProps}
         />
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}

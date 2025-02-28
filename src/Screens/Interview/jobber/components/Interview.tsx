@@ -1,25 +1,22 @@
 import {Platform, StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
-import color from '../../../Constants/color';
-import {TablerHomeFilled, TablerSearch} from '../../../../assets/Icon';
-import {FlatList} from 'react-native-gesture-handler';
-import PostsCard from '../../Recruiting/Post/components/PostsCard';
 
-interface InterviewProps {
-  route: {
-    params: {
-      type: string;
-    };
-  };
-}
+import {FlatList} from 'react-native-gesture-handler';
+import {TablerSearch} from '../../../../../assets/Icon';
+import PostsCard from '../../../Recruiting/Post/components/PostsCard';
+import color from '../../../../Constants/color';
+import {ParamListBase, RouteProp} from '@react-navigation/native';
+
+type InterviewProps = {
+  route: RouteProp<ParamListBase, string>;
+};
 const theme = 'light';
 
 const Interview = ({route}: InterviewProps) => {
-  const {type} = route.params;
+  const {type} = route.params as {type: string};
   return (
     <View style={styles.container}>
-      <Text>{type}</Text>
-      <View>
+      <View style={{marginTop: 16}}>
         <Text>ຄົ້ນຫາ</Text>
         <View style={[styles.inputContainer]}>
           <TablerSearch />
@@ -44,7 +41,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: color[theme].backgroundPage,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
   },
   text: {
     fontSize: 16,
@@ -53,6 +50,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   inputContainer: {
+    
     minHeight: 48,
     borderColor: color[theme].containerBorder,
     borderWidth: 1,
