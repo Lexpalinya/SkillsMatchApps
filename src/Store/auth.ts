@@ -15,13 +15,25 @@ const userSlice = createApi({
     }),
     register: builder.mutation<
       unknown,
-      {email: string; phoneNumber: string; role: string; password: string}
+      {
+        email: string;
+        phoneNumber: string;
+        role: string;
+        password: string;
+        username?: string;
+      }
     >({
-      query: data => ({url: '/user/register', method: 'POST', data}),
+      query: data => ({url: '/users/register', method: 'POST', data}),
+    }),
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: '/users/refreshToken',
+        method: 'POST',
+      }),
     }),
   }),
 });
 
-export const {useLoginMutation, useRegisterMutation} = userSlice;
-
+export const {useLoginMutation, useRegisterMutation, useRefreshTokenMutation} =
+  userSlice;
 export default userSlice;
