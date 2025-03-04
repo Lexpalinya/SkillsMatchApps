@@ -14,8 +14,9 @@ import {
 import {RootStackParamList} from '../../../Router/RootNavigation';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {SvgProps} from 'react-native-svg';
-import {useLogout} from '../../../Utils/useLogOut';
+
 import CustomAlert from '../../../Utils/components/CustomAlert';
+import {userService} from '../../../Service/user.service';
 
 const theme = 'light';
 interface menuProps {
@@ -40,11 +41,11 @@ const menu: menuProps[] = [
 const JobberScree = () => {
   const {
     alertVisible,
-    showLogoutAlert,
-    hideLogoutAlert,
     confirmLogout,
+    hideLogoutAlert,
     navigation,
-  } = useLogout();
+    showLogoutAlert,
+  } = userService().useUserLogOut();
 
   const OnPress = (index: number, item: menuProps) => {
     if (index === menu.length - 1) {

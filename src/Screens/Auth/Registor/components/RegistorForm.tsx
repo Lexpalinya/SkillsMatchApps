@@ -12,7 +12,7 @@ const RegistorForm = () => {
   const [role, setRole] = useState('jobber');
   const isSelect = role == 'jobber';
   const {handleRegisterSubmit, errorText, isLoading, setShowAlert, showAlert} =
-    userService().userRegister();
+    userService().useUserRegister();
   const validationSchemaRegister = Yup.object().shape({
     phoneNumber: Yup.string()
       .matches(/^20\d{8}$/, 'ເບີໂທຕ້ອງຂື້ນຕົ້ນດ້ວຍ 20 ແລະມີ 8 ຕົວເລກ')

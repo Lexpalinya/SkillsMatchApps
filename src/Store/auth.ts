@@ -31,9 +31,19 @@ const userSlice = createApi({
         method: 'POST',
       }),
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: '/users/logout',
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const {useLoginMutation, useRegisterMutation, useRefreshTokenMutation} =
-  userSlice;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useRefreshTokenMutation,
+  useLogoutMutation,
+} = userSlice;
 export default userSlice;

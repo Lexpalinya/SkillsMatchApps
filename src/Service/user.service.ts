@@ -1,13 +1,22 @@
 import {useEffect, useState} from 'react';
-import {useLoginMutation, useRegisterMutation} from '../Store/auth';
+import {
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+} from '../Store/auth';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../Router/RootNavigation';
 import Toast from 'react-native-toast-message';
-import {saveUserDataToLocalStorage} from '../helpers';
+import {
+  clearAllDataFromLocalStorage,
+  getUserDataFromLocalStorage,
+  saveUserDataToLocalStorage,
+} from '../helpers';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 export const userService = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const userLogin = () => {
+  const useUserLogin = () => {
     const [login, {isLoading, error}] = useLoginMutation();
     const [errorText, setErrorText] = useState({
       phoneNumber: '',
@@ -55,7 +64,7 @@ export const userService = () => {
       errorText,
     };
   };
-  const userRegister = () => {
+  const useUserRegister = () => {
     const [register, {isLoading, error}] = useRegisterMutation();
     const [showAlert, setShowAlert] = useState(false);
     const [errorText, setErrorText] = useState({
@@ -130,8 +139,41 @@ export const userService = () => {
       setShowAlert,
     };
   };
+  const useUserLogOut = () => {
+    const [logout, {isLoading, error}] = useLogoutMutation();
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const handleLogout = async () => {
+      try {
+        const res = await logout({}).unwrap();
+        if (res.message === 'Logout successful') {
+          setAlertVisible(false);
+          navigation.reset({index: 0, routes: [{name: 'LoginPage'}]});
+          await clearAllDataFromLocalStorage();
+        }
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    };
+
+    const showLogoutAlert = () => setAlertVisible(true);
+    const hideLogoutAlert = () => setAlertVisible(false);
+    const confirmLogout = () => handleLogout();
+
+    return {
+      alertVisible,
+
+      showLogoutAlert,
+      hideLogoutAlert,
+      confirmLogout,
+      isLoading,
+      navigation,
+      error,
+    };
+  };
   return {
-    userLogin,
-    userRegister,
+    useUserLogin,
+    useUserRegister,
+    useUserLogOut,
   };
 };

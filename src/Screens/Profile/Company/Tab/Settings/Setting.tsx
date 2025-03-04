@@ -1,5 +1,5 @@
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import color from '../../../../../Constants/color';
 import {
   CuidaLogoutOutline,
@@ -9,10 +9,10 @@ import {
 } from '../../../../../../assets/Icon';
 import {SvgProps} from 'react-native-svg';
 
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../../../../Router/RootNavigation';
-import {useLogout} from '../../../../../Utils/useLogOut';
 import CustomAlert from '../../../../../Utils/components/CustomAlert';
+import {userService} from '../../../../../Service/user.service';
+
 const theme = 'light';
 interface menuProps {
   title: string;
@@ -31,7 +31,7 @@ const Setting = () => {
     hideLogoutAlert,
     navigation,
     showLogoutAlert,
-  } = useLogout();
+  } = userService().userLogOut();
   const onPress = (index: number, item: menuProps) => {
     if (index === menu.length - 1) {
       showLogoutAlert();
