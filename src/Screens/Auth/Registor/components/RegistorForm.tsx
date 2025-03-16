@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -7,9 +7,11 @@ import CustomInputAuth from '../../../../Utils/components/CustomInput';
 import color from '../../../../Constants/color';
 import {userService} from '../../../../Service/user.service';
 import CustomAlert from '../../../../Utils/components/CustomAlert';
+import {MdiLightEye, PhEyeSlashLight} from '../../../../../assets/Icon';
 const theme = 'light';
 const RegistorForm = () => {
   const [role, setRole] = useState('jobber');
+  const [hidePassword, setHidePassword] = useState(true);
   const isSelect = role == 'jobber';
   const {handleRegisterSubmit, errorText, isLoading, setShowAlert, showAlert} =
     userService().useUserRegister();
@@ -120,7 +122,18 @@ const RegistorForm = () => {
             error={errorText.password}
             helperText={errors.password}
             touched={Boolean(touched.password)}
-            secureTextEntry={true}
+            secureTextEntry={hidePassword}
+            rightIcon={
+              <TouchableOpacity
+                style={{marginBottom: 0}}
+                onPress={() => setHidePassword(!hidePassword)}>
+                {hidePassword ? (
+                  <MdiLightEye />
+                ) : (
+                  <PhEyeSlashLight width={24} height={24} />
+                )}
+              </TouchableOpacity>
+            }
           />
           <CustomInputAuth
             containerStyle={styles.input}
@@ -132,7 +145,18 @@ const RegistorForm = () => {
             // error={errors.confrimPassword}
             helperText={errors.confrimPassword}
             touched={Boolean(touched.confrimPassword)}
-            secureTextEntry={true}
+            secureTextEntry={hidePassword}
+            rightIcon={
+              <TouchableOpacity
+                style={{marginBottom: 0}}
+                onPress={() => setHidePassword(!hidePassword)}>
+                {hidePassword ? (
+                  <MdiLightEye />
+                ) : (
+                  <PhEyeSlashLight width={24} height={24} />
+                )}
+              </TouchableOpacity>
+            }
           />
           <CustomButton
             onPress={() => {

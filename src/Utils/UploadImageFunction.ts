@@ -1,17 +1,18 @@
 import {
-  CameraOptions,
   launchCamera,
   launchImageLibrary,
+  CameraOptions,
+  Asset,
 } from 'react-native-image-picker';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 export const handleImageUpload = async (
   useCamera: boolean = false,
-): Promise<string | null> => {
-  return new Promise(async (resolve, reject) => {
+): Promise<Asset | null> => {
+  return new Promise((resolve, reject) => {
     const options: CameraOptions = {
       mediaType: 'photo',
       quality: 1,
+      includeBase64: false, // Ensure we get a file URI
     };
 
     const callback = (response: any) => {
@@ -19,24 +20,16 @@ export const handleImageUpload = async (
         console.log('User cancelled image selection');
         resolve(null);
       } else if (response.errorMessage) {
-        console.error('Error occurred:', response.errorMessage);
+        console.error('Error:', response.errorMessage);
         reject(response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
-        console.log('response', response);
-        resolve(response.assets[0].uri);
+        resolve(response.assets[0]); // Returns an image asset
       } else {
         resolve(null);
       }
     };
 
-    // Request camera permission if using camera
     if (useCamera) {
-      const permissionStatus = await request(PERMISSIONS.ANDROID.CAMERA);
-      if (permissionStatus !== RESULTS.GRANTED) {
-        console.log('Camera permission denied');
-        resolve(null);
-        return;
-      }
       launchCamera(options, callback);
     } else {
       launchImageLibrary(options, callback);

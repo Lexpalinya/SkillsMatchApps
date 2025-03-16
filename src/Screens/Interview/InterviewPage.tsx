@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import InterviewTabCompany from './company/InterviewTabCompany';
@@ -8,7 +8,7 @@ const role: string = 'companys';
 
 const InterviewPage = () => {
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       {role === 'company' ? <InterviewTabCompany /> : <InterviewTabJobber />}
     </View>
   );

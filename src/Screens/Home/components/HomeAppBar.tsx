@@ -2,9 +2,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import CustomImage from '../../../Utils/components/CustomImage';
 import color from '../../../Constants/color';
+import {useSelector} from 'react-redux';
+import {setUserProfile} from '../../../Store/userSlice';
+import {profileUrl} from '../../../Configs/config';
 
 const theme = 'light';
 const HomeAppBar = () => {
+  const userPrfile = useSelector((state: any) => state.user);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>SkillMatch</Text>
@@ -12,7 +16,7 @@ const HomeAppBar = () => {
       <CustomImage
         style={styles.image}
         source={{
-          uri: 'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+          uri: userPrfile.profile ?? profileUrl,
         }}
         width={150}
         height={150}

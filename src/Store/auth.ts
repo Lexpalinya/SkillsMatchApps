@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../Configs/axios/axiosBaseQuery';
+import {Asset} from 'react-native-image-picker';
 
 const userSlice = createApi({
   reducerPath: 'UserSlice',
@@ -23,8 +24,74 @@ const userSlice = createApi({
         username?: string;
       }
     >({
-      query: data => ({url: '/users/register', method: 'POST', data}),
+      query: data => ({
+        url: '/users/register',
+        method: 'POST',
+        data,
+      }),
     }),
+    update: builder.mutation<
+      unknown,
+      {
+        email?: string;
+        phoneNumber?: string;
+        username?: string;
+        visible?: boolean;
+      }
+    >({
+      query: data => ({
+        url: '/users',
+        method: 'PUT',
+        data,
+      }),
+    }),
+
+    updateProfile: builder.mutation<unknown, {img: Asset; url?: string}>({
+      query: ({img, url}) => {
+        const formData = new FormData();
+        // formData.append('img', {
+        //   uri: img.uri,
+        //   name: img.fileName || 'upload.jpg',
+        //   type: img.type || 'image/jpeg',
+        // } as any);
+
+        // if (url) {
+        //   formData.append('url', url);
+        // }
+        return {
+          url: 'users/profile',
+          method: 'PUT',
+          data: {
+            img: {
+              uri: img.uri,
+              name: img.fileName || 'upload.jpg',
+              type: img.type || 'image/jpeg',
+            } as any,
+          },
+        };
+      },
+    }),
+
+    updateBackground: builder.mutation<unknown, {img: Asset; url?: string}>({
+      query: ({img, url}) => {
+        const formData = new FormData();
+        formData.append('img', {
+          uri: img.uri,
+          name: img.fileName || 'upload.jpg',
+          type: img.type || 'image/jpeg',
+        } as any);
+
+        if (url) {
+          formData.append('url', url);
+        }
+        return {
+          url: '/users/blackground',
+          method: 'PUT',
+          data: formData,
+        };
+      },
+    }),
+
     refreshToken: builder.mutation({
       query: () => ({
         url: '/users/refreshToken',
@@ -45,5 +112,8 @@ export const {
   useRegisterMutation,
   useRefreshTokenMutation,
   useLogoutMutation,
+  useUpdateMutation,
+  useUpdateBackgroundMutation,
+  useUpdateProfileMutation,
 } = userSlice;
 export default userSlice;

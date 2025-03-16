@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 // ฟังก์ชันบันทึกข้อมูลใน AsyncStorage
 const saveDataToLocalStorage = async (key: string, value: any) => {
   try {

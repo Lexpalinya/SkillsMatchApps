@@ -1,0 +1,47 @@
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
+export type UserProfile = {
+  id: string;
+  isActive: boolean;
+  visible: boolean;
+  username: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  profile: string | null;
+  blackground: string | null;
+  role: 'jobber' | 'admin' | 'user';
+  block: boolean;
+  loginVersion: number;
+  createdAt: string; // หรือ Date
+  updatedAt: string; // หรือ Date
+  accessToken: string;
+  refreshToken: string;
+};
+
+
+// ✅ กำหนดให้ initialState เป็น UserProfile | null
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: null as UserProfile | null,
+  reducers: {
+    setUserProfile: (
+      _state: UserProfile | null,
+      action: PayloadAction<UserProfile>,
+    ) => {
+      return action.payload;
+    },
+    
+    clearUserProfile: () => null,
+    updateUserProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {
+      if (!state) return; // นี่อาจเป็นปัญหาถ้า state เป็น null
+      Object.assign(state, action.payload); // ตรวจสอบว่านี่ทำงานถูกต้อง
+    },
+  },
+});
+
+// ✅ Export Actions และ Reducer
+export const {setUserProfile, clearUserProfile, updateUserProfile} =
+  userSlice.actions;
+export default userSlice.reducer;

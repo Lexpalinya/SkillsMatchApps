@@ -1,110 +1,130 @@
-import React, {useState} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInputProps,
-} from 'react-native';
+import React from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import CustomAppBar from '../../Utils/components/CustomAppBar';
-import CustomImage from '../../Utils/components/CustomImage';
-import CustomInputAuth from '../../Utils/components/CustomInput';
-import {IconamoonEdit} from '../../../assets/Icon';
 import color from '../../Constants/color';
-import {handleImageUpload} from '../../Utils/UploadImageFunction';
-
+import {blackgroundProfileUrl, profileUrl} from '../../Configs/config';
+import {useSelector} from 'react-redux';
+import {EditableImage} from './components';
+import CustomInputAuth from '../../Utils/components/CustomInput';
+import {Formik} from 'formik';
+import CustomButton from '../../Utils/components/CustomButton';
+import {userService} from '../../Service/user.service';
+import * as Yup from 'yup';
 const theme = 'light';
 
-interface EditableImageProps {
-  uri: string;
-  type?: 'background' | 'profile';
-  onPress: () => any;
-}
-
-const EditableImage: React.FC<EditableImageProps> = ({
-  uri,
-  type = 'profile',
-  onPress,
-}) => {
-  const [Uri, setUri] = useState(uri);
-  const uploadImage = async () => {
-    const newUri = await handleImageUpload();
-    if (newUri) {
-      setUri(newUri);
-    }
-  };
-  return (
-    <View
-      style={
-        type === 'background'
-          ? styles.backgroundContainer
-          : styles.profileContainer
-      }>
-      <CustomImage
-        source={{uri: Uri}}
-        style={type === 'background' ? styles.backgroundImage : styles.profile}
-      />
-      <TouchableOpacity
-        style={[
-          styles.editButton,
-          type === 'background'
-            ? {}
-            : {
-                right: 5,
-                bottom: 5,
-              },
-        ]}
-        onPress={() => uploadImage()}>
-        <IconamoonEdit />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-interface EditableInputProps extends TextInputProps {
-  label: string;
-}
-
-const EditableInput: React.FC<EditableInputProps> = ({label, ...props}) => {
-  return (
-    <CustomInputAuth
-      label={label}
-      {...props}
-      rightIcon={
-        <TouchableOpacity style={{marginBottom: 10}}>
-          <IconamoonEdit />
-        </TouchableOpacity>
-      }
-    />
-  );
-};
-
 const SettingPage = () => {
-  const imageUrl =
-    'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg';
+  const validationSchema = Yup.object().shape({
+    phoneNumber: Yup.string()
+      .matches(/^20\d{8}$/, 'ເບີໂທຕ້ອງຂື້ນຕ້ນດ້ວຍ 20 ແລະມີ 8 ຕົວເລກ')
+      .required('ກະລຸນາໃສ່ເບີໂທ'),
+    email: Yup.string().matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'ອີເມວບໍ່ຖືກຕ້ອງ emilname@gmail.com',
+    ),
+    username: Yup.string().required('ກະລຸນາປ້ອນຊື່ຂອງທ່ານ'),
+    profile: Yup.object()
+      .shape({
+        uri: Yup.string().required('Profile image is required'),
+        type: Yup.string(),
+        name: Yup.string(),
+      })
+      .nullable(), // Allow null if no image is provided
 
+    blackground: Yup.object()
+      .shape({
+        uri: Yup.string().required('Background image is required'),
+        type: Yup.string(),
+        name: Yup.string(),
+      })
+      .nullable(),
+  });
+
+
+  const userProfile = useSelector((state: any) => state.user);
+  const {handleSubmitUpdate, isLoading, errorText} =
+    userService().updateProfile();
   return (
-    <ScrollView style={styles.body}>
-      <CustomAppBar title="ຕັ້ງຄ່າ" />
-      <View style={styles.header}>
-        <EditableImage
-          uri={imageUrl}
-          type="background"
-          onPress={() => console.log('first')}
-        />
-        <EditableImage
-          uri={imageUrl}
-          type="profile"
-          onPress={() => console.log('firsterewfjohiufj')}
-        />
-      </View>
-      <View style={styles.containerInput}>
-        <EditableInput label="ຊື່ອົງກອນ" placeholder="XXXXXX" />
-        <EditableInput label="ອີເມວ" placeholder="XXXXXX" />
-        <EditableInput label="ເບີໂທ" placeholder="XXXXXX" />
-        <EditableInput label="ລະຫັດຜ່ານ" placeholder="XXXXXX" secureTextEntry />
-      </View>
-    </ScrollView>
+    <Formik
+      initialValues={{
+        username: userProfile.username,
+        email: userProfile.email,
+        phoneNumber: userProfile.phoneNumber,
+        profile: userProfile.profile,
+        blackground: userProfile.blackground,
+      }}
+      // validationSchema={validationSchema}
+      onSubmit={values => {
+        handleSubmitUpdate(values);
+     
+      }}>
+      {({
+        handleChange,
+        handleSubmit,
+        handleBlur,
+        setFieldValue,
+        values,
+        errors,
+        touched,
+      }) => {
+        return (
+          <ScrollView style={styles.body}>
+            <CustomAppBar title="ຕັ້ງຄ່າ" />
+            <View style={styles.header}>
+              <EditableImage
+                uri={values.blackground ?? blackgroundProfileUrl}
+                type="blackground"
+                onDataChange={(value: any) =>
+                  setFieldValue('blackground', value)
+                }
+              />
+              <EditableImage
+                uri={values.profile ?? profileUrl}
+                type="profile"
+                onDataChange={(value: any) => setFieldValue('profile', value)} // ใช้ setFieldValue
+              />
+            </View>
+            <View style={styles.containerInput}>
+              <CustomInputAuth
+                label="ຊື່ອົງກອນ"
+                placeholder="XXXXXX"
+                value={values.username}
+                onBlur={handleBlur('username')}
+                onChangeText={handleChange('username')}
+                error={errorText.username}
+                helperText={errors.username as string}
+                touched={Boolean(touched.username)}
+              />
+              <CustomInputAuth
+                label="ອີເມວ"
+                placeholder="emailname@gmail.com"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                error={errorText.email}
+                helperText={errors.email as string}
+                touched={Boolean(touched.email)}
+              />
+              <CustomInputAuth
+                label="ເບີໂທ"
+                placeholder="XXXXXX"
+                value={values.phoneNumber}
+                onBlur={handleBlur('phoneNumber')}
+                onChangeText={handleChange('phoneNumber')}
+                error={errorText.phoneNumber}
+                touched={Boolean(touched.phoneNumber)}
+                helperText={errors.phoneNumber as string}
+              />
+              <CustomButton
+                title="ບັນທຶກ"
+                onPress={() => handleSubmit()}
+                style={styles.button}
+                disabled={isLoading}
+              />
+            </View>
+          </ScrollView>
+        );
+      }}
+    </Formik>
   );
 };
 
@@ -113,6 +133,7 @@ export default SettingPage;
 const styles = StyleSheet.create({
   body: {
     backgroundColor: color[theme].backgroundPage,
+    height: '100%',
   },
   header: {
     backgroundColor: color[theme].backgroundPage,
@@ -140,16 +161,8 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: color[theme].backgroundPage,
   },
-  editButton: {
-    borderWidth: 1,
-    borderColor: color[theme].containerBorder,
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: '#fff',
-    padding: 5,
-    borderRadius: 20,
-    elevation: 3,
+  button: {
+    marginTop: 80,
   },
   containerInput: {
     marginTop: 50,

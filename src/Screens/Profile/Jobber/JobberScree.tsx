@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import CustomImage from '../../../Utils/components/CustomImage';
 import color from '../../../Constants/color';
 import {Text} from 'react-native-gesture-handler';
@@ -12,7 +12,7 @@ import {
   SolarUserCheckLinear,
 } from '../../../../assets/Icon';
 import {RootStackParamList} from '../../../Router/RootNavigation';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+
 import {SvgProps} from 'react-native-svg';
 
 import CustomAlert from '../../../Utils/components/CustomAlert';
@@ -38,7 +38,7 @@ const menu: menuProps[] = [
   {title: 'ຕັ້ງຄ່າ', icon: LsiconSettingOutline, route: 'SettingPage'},
   {title: 'ອອກຈາກລະບົບ', icon: CuidaLogoutOutline, route: 'LoginPage'},
 ];
-const JobberScree = () => {
+const JobberScreen = () => {
   const {
     alertVisible,
     confirmLogout,
@@ -118,7 +118,7 @@ const JobberScree = () => {
   );
 };
 
-export default JobberScree;
+export default JobberScreen;
 
 const styles = StyleSheet.create({
   container: {

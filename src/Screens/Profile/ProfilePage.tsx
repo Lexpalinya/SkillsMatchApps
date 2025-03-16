@@ -1,16 +1,12 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-
-import JobberScree from './Jobber/JobberScree';
-import {RootStackParamList} from '../../Router/RootNavigation';
+import JobberScreen from './Jobber/JobberScree';
 import CompanyScreen from './Company/CompanyScreen';
 const role: string = 'company';
 const ProfilePage = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View style={styles.stlyesView}>
-      {role === 'company' ? <CompanyScreen /> : <JobberScree />}
+      {role === 'company' ? <CompanyScreen /> : <JobberScreen />}
     </View>
   );
 };

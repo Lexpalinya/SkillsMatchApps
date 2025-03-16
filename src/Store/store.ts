@@ -1,9 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
 import userSlice from './auth';
-import {getDefaultConfig} from '@react-native/metro-config';
+import userReducer from '../Store/userSlice';
 
 const store = configureStore({
   reducer: {
+    user: userReducer,
     [userSlice.reducerPath]: userSlice.reducer,
   },
   middleware: getDefaultConfig =>

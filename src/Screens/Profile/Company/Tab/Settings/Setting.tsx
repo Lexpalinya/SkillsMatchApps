@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import color from '../../../../../Constants/color';
 import {
@@ -31,7 +31,7 @@ const Setting = () => {
     hideLogoutAlert,
     navigation,
     showLogoutAlert,
-  } = userService().userLogOut();
+  } = userService().useUserLogOut();
   const onPress = (index: number, item: menuProps) => {
     if (index === menu.length - 1) {
       showLogoutAlert();

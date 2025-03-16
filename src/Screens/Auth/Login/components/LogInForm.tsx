@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -7,10 +7,16 @@ import CustomInputAuth from '../../../../Utils/components/CustomInput';
 import CustomButton from '../../../../Utils/components/CustomButton';
 
 import {userService} from '../../../../Service/user.service';
+import {
+  IconamoonEdit,
+  MdiLightEye,
+  PhEyeSlashLight,
+} from '../../../../../assets/Icon';
 
 const LogInForm = () => {
-  const {errorText, handleLoginSubmit, isLoading} = userService().userLogin();
-
+  const {errorText, handleLoginSubmit, isLoading} =
+    userService().useUserLogin();
+  const [hidePassword, setHidePassword] = useState(true);
   const validationSchemaLogin = Yup.object().shape({
     phoneNumber: Yup.string()
       .matches(/^20\d{8}$/, 'ເບີໂທຕ້ອງຂື້ນຕົ້ນດ້ວຍ 20 ແລະມີ 8 ຕົວເລກ')
@@ -46,6 +52,18 @@ const LogInForm = () => {
             error={errorText.password}
             touched={Boolean(touched.password)}
             helperText={errors.password}
+            secureTextEntry={hidePassword}
+            rightIcon={
+              <TouchableOpacity
+                style={{marginBottom: 0}}
+                onPress={() => setHidePassword(!hidePassword)}>
+                {hidePassword ? (
+                  <MdiLightEye />
+                ) : (
+                  <PhEyeSlashLight width={24} height={24} />
+                )}
+              </TouchableOpacity>
+            }
           />
           <CustomButton
             onPress={() => handleSubmit()}
