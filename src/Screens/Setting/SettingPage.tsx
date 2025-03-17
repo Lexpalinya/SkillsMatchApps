@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import CustomAppBar from '../../Utils/components/CustomAppBar';
 import color from '../../Constants/color';
@@ -22,25 +22,42 @@ const SettingPage = () => {
       'ອີເມວບໍ່ຖືກຕ້ອງ emilname@gmail.com',
     ),
     username: Yup.string().required('ກະລຸນາປ້ອນຊື່ຂອງທ່ານ'),
-    profile: Yup.object()
-      .shape({
-        uri: Yup.string().required('Profile image is required'),
-        type: Yup.string(),
-        name: Yup.string(),
+    profile: Yup.mixed()
+      .test('is-string-or-object', 'Invalid profile image', (value: any) => {
+        if (typeof value === 'string') {
+          return true; // ✅ ถ้าเป็น string (URL) ให้ผ่าน
+        }
+        if (typeof value === 'object' && value !== null) {
+          return (
+            typeof value.uri === 'string' &&
+            typeof value.type === 'string' &&
+            typeof value.name === 'string'
+          ); // ✅ ถ้าเป็น object และมี `uri`, `type`, `name` ให้ผ่าน
+        }
+        return false; // ❌ ถ้าไม่ใช่ทั้ง string และ object ให้ error
       })
-      .nullable(), // Allow null if no image is provided
-
-    blackground: Yup.object()
-      .shape({
-        uri: Yup.string().required('Background image is required'),
-        type: Yup.string(),
-        name: Yup.string(),
+      .required('Profile image is required'),
+    blackground: Yup.mixed()
+      .test('is-string-or-object', 'Invalid background image', (value: any) => {
+        if (typeof value === 'string') {
+          return true; // ✅ ถ้าเป็น string (URL) ให้ผ่าน
+        }
+        if (typeof value === 'object' && value !== null) {
+          return (
+            typeof value.uri === 'string' &&
+            typeof value.type === 'string' &&
+            typeof value.name === 'string'
+          ); // ✅ ถ้าเป็น object และมี `uri`, `type`, `name` ให้ผ่าน
+        }
+        return false; // ❌ ถ้าไม่ใช่ทั้ง string และ object ให้ error
       })
-      .nullable(),
+      .required('Background image is required'),
   });
 
-
   const userProfile = useSelector((state: any) => state.user);
+  useEffect(() => {
+    console.log('User profile updated:', userProfile);
+  }, [userProfile]);
   const {handleSubmitUpdate, isLoading, errorText} =
     userService().updateProfile();
   return (
@@ -52,10 +69,10 @@ const SettingPage = () => {
         profile: userProfile.profile,
         blackground: userProfile.blackground,
       }}
-      // validationSchema={validationSchema}
+      enableReinitialize={true}
+      validationSchema={validationSchema}
       onSubmit={values => {
         handleSubmitUpdate(values);
-     
       }}>
       {({
         handleChange,
@@ -115,7 +132,7 @@ const SettingPage = () => {
                 helperText={errors.phoneNumber as string}
               />
               <CustomButton
-                title="ບັນທຶກ"
+                title={isLoading ? 'ກຳລັງບັນທຶກ...' : 'ບັນທຶກ'}
                 onPress={() => handleSubmit()}
                 style={styles.button}
                 disabled={isLoading}

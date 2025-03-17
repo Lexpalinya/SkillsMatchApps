@@ -15,17 +15,6 @@ const axiosBaseQuery =
     } catch (error) {
       const axiosError = error as AxiosError;
 
-      // Log more detailed error information for debugging
-      console.error('Axios error:', axiosError);
-
-      // If error.response is available, log the status and response data
-      if (axiosError.response) {
-        console.error('Response error details:', {
-          status: axiosError.response.status,
-          data: axiosError.response.data,
-        });
-      }
-
       return {
         error: {
           status: axiosError.response?.status,

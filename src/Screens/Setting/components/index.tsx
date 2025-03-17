@@ -1,5 +1,4 @@
 import {StyleSheet, TextInputProps, TouchableOpacity, View} from 'react-native';
-import CustomInputAuth from '../../../Utils/components/CustomInput';
 import {IconamoonEdit} from '../../../../assets/Icon';
 import CustomImage from '../../../Utils/components/CustomImage';
 import color from '../../../Constants/color';
@@ -32,7 +31,11 @@ export const EditableImage: React.FC<EditableImageProps> = ({
     const newData: any = await handleImageUpload();
     if (newData) {
       setUri(newData.uri);
-      onDataChange(newData);
+      onDataChange({
+        uri: newData.uri,
+        name: newData.name || 'upload.jpg',
+        type: newData.type || 'image/jpeg',
+      });
     }
   };
 
@@ -46,6 +49,7 @@ export const EditableImage: React.FC<EditableImageProps> = ({
       <CustomImage
         source={{uri: Uri}}
         style={type === 'blackground' ? styles.backgroundImage : styles.profile}
+        showFull={false}
       />
       <TouchableOpacity
         style={[

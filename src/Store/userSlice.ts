@@ -19,7 +19,6 @@ export type UserProfile = {
   refreshToken: string;
 };
 
-
 // ✅ กำหนดให้ initialState เป็น UserProfile | null
 
 const userSlice = createSlice({
@@ -32,11 +31,10 @@ const userSlice = createSlice({
     ) => {
       return action.payload;
     },
-    
     clearUserProfile: () => null,
     updateUserProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {
-      if (!state) return; // นี่อาจเป็นปัญหาถ้า state เป็น null
-      Object.assign(state, action.payload); // ตรวจสอบว่านี่ทำงานถูกต้อง
+      if (!state || !action.payload) return; // เช็คว่า payload มีค่าหรือไม่
+      return {...state, ...action.payload}; // ใช้ spread operator เพื่อสร้าง state ใหม่
     },
   },
 });

@@ -41,6 +41,7 @@ export const userService = () => {
         handleError(error);
       }
     }, [error]);
+
     const handleError = (errors: any) => {
       setErrorText({password: '', phoneNumber: ''});
       if (errors.data?.message === 'Resource not found user') {
@@ -60,6 +61,7 @@ export const userService = () => {
           : 'ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ',
       });
     };
+
     const handleLoginSubmit = async (values: {
       phoneNumber: string;
       password: string;
@@ -226,18 +228,21 @@ export const userService = () => {
       }
     };
 
-    const uploadImage = async (image: any, type: 'profile' | 'blackground') => {
+    const uploadImage = async (
+      image: {
+        uri: string;
+        name: string;
+        type: string;
+      },
+      type: 'profile' | 'blackground',
+    ) => {
       const formData = new FormData();
-      formData.append('img', {
-        uri: image.uri,
-        name: image.name || 'upload.jpg',
-        type: image.type || 'image/jpeg',
-      });
+      formData.append('img', image);
 
-      setLoadingStates(prev => ({
-        ...prev,
-        [`is${capitalizeFirstLetter(type)}Loading`]: true,
-      }));
+      setLoadingStates({
+        isBackgroundLoading: true,
+        isProfileLoading: true,
+      });
 
       try {
         const response = await fetch(
@@ -262,15 +267,11 @@ export const userService = () => {
       } catch (error) {
         console.error(`${type} Upload failed:`, error);
       } finally {
-        setLoadingStates(prev => ({
-          ...prev,
-          [`is${capitalizeFirstLetter(type)}Loading`]: false,
-        }));
+        setLoadingStates({
+          isBackgroundLoading: false,
+          isProfileLoading: false,
+        });
       }
-    };
-
-    const capitalizeFirstLetter = (string: string) => {
-      return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     const handleSubmitUpdate = async (values: {
@@ -289,17 +290,22 @@ export const userService = () => {
       } = ExtractChangeData(values, userProfile);
 
       if (Object.keys(changedData).length === 0) {
+        navigation.goBack();
         return;
       }
 
       if (changedData.profile) {
-        const data = await uploadImage(changedData.profile, 'profile');
-        dispatch(updateUserProfile({profile: data.profile}));
+        const res = await uploadImage(changedData.profile, 'profile');
+        if (res) {
+          dispatch(updateUserProfile(res));
+        }
       }
 
       if (changedData.blackground) {
-        const data = await uploadImage(changedData.blackground, 'blackground');
-        dispatch(updateUserProfile({blackground: data.blackground}));
+        const res = await uploadImage(changedData.blackground, 'blackground');
+        if (res) {
+          dispatch(updateUserProfile(res));
+        }
       }
 
       delete changedData.blackground;
@@ -318,6 +324,7 @@ export const userService = () => {
         }
       }
       await saveUserDataToLocalStorage(userProfile);
+      navigation.goBack();
     };
     return {
       handleSubmitUpdate,

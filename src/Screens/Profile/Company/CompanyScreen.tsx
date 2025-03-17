@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -13,6 +13,8 @@ import {SvgProps} from 'react-native-svg';
 import Setting from './Tab/Settings/Setting';
 import CustomImage from '../../../Utils/components/CustomImage';
 import color from '../../../Constants/color';
+import {useSelector} from 'react-redux';
+import {blackgroundProfileUrl, profileUrl} from '../../../Configs/config';
 
 const theme = 'light';
 const Tab = createMaterialTopTabNavigator();
@@ -34,25 +36,26 @@ const TabArr = [
     icon: LsiconSettingOutline,
   },
 ];
-
 const CompanyScreen: React.FC = () => {
+  const userProfile = useSelector((state: any) => state.user);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <CustomImage
           source={{
-            uri: 'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+            uri: userProfile.blackground ?? blackgroundProfileUrl,
           }}
           style={styles.backgroundImage}
         />
         <CustomImage
           source={{
-            uri: 'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+            uri: userProfile.profile ?? profileUrl,
           }}
           style={styles.profile}
         />
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>ບໍລິສັດສຸວັນນີ.</Text>
+          <Text style={styles.title}>{userProfile.username}.</Text>
           <Text style={styles.businessType}>ວັດສະດຸກໍ່ສ້າງ</Text>
           <Text style={styles.address}>ນະຄອນຫຼວງວຽງຈັນ, ຈັນທະບູລີ, ໂພນຕອງ</Text>
         </View>

@@ -17,6 +17,8 @@ import {SvgProps} from 'react-native-svg';
 
 import CustomAlert from '../../../Utils/components/CustomAlert';
 import {userService} from '../../../Service/user.service';
+import {useSelector} from 'react-redux';
+import {blackgroundProfileUrl, profileUrl} from '../../../Configs/config';
 
 const theme = 'light';
 interface menuProps {
@@ -54,19 +56,20 @@ const JobberScreen = () => {
       navigation.navigate(item.route);
     }
   };
+  const userProfile = useSelector((state: any) => state.user);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <CustomImage
           source={{
-            uri: 'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+            uri: userProfile.blackground ?? blackgroundProfileUrl,
           }}
           style={styles.backgroundImage}
         />
         <CustomImage
           source={{
-            uri: 'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+            uri: userProfile.profile ?? profileUrl,
           }}
           style={styles.profile}
         />
